@@ -3,10 +3,10 @@
 	start = 1
 	chars BYTE 'H','A','C','E','B','D','F','G'
 	links DWORD 0,4,5,6,2,3,7,0
-	copy_arr BYTE LENGTHOF chars DUP('#'),0
+	copytarget BYTE LENGTHOF chars DUP('#'),0
 	question BYTE "Question",0
-	tab BYTE " ",0
-	letter BYTE "A",0
+	space BYTE " ",0
+	alphabet BYTE "A",0
 .code
 main PROC
 ;Q2
@@ -24,12 +24,12 @@ main PROC
 	mov dh,4
 	L1:
 		mov dl,chars[eax]
-		mov copy_arr[ebx],dl
+		mov copytarget[ebx],dl
 		inc ebx 
 		mul dh
 		mov eax,links[eax]
 		loop L1
-	mov edx,OFFSET copy_arr
+	mov edx,OFFSET copytarget
 	call WriteString
 	call crlf
 	call crlf
@@ -61,6 +61,7 @@ main PROC
 	mov eax,7
 	call WriteDec
 	call crlf
+	call crlf
 
 	mov esi,0
 	mov ebx,0
@@ -73,19 +74,18 @@ main PROC
 		inc ecx
 		L4:
 			
-			mov edx,OFFSET tab
+			mov edx,OFFSET space
 			call WriteString
 			inc ebx
 			loop L4
 		
 		cmp esi,100
-		je L6
-		mov edx,OFFSET letter
+		je L5
+		mov edx,OFFSET alphabet
 		call WriteString
 		inc esi
 	jmp L3
-	L6:
-		call crlf
+	L5:
 		call   waitmsg
 		exit
 main ENDP

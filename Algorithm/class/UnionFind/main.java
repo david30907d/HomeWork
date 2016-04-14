@@ -9,13 +9,18 @@ public class Main {
 		// TODO Auto-generated method stub
 		Scanner cin=new Scanner(System.in);
 		UnionFind u = new UnionFind(10);
-		u.union(1, 0);
-		System.out.println("1 nd 3 is connected:"+u.connected(1, 3));
-		u.union(5, 7);
-		System.out.println("5 nd 7 is connected:"+u.connected(5, 7));
-		u.union(8, 9);
-		u.union(1, 5);
-		System.out.println("5 nd 7 is connected:"+u.connected(5, 0));
+		u.union(1, 2);
+		u.union(3, 4);
+		u.union(4, 9);
+		u.union(8, 4);
+
+		u.union(5, 6);
+		u.union(5, 0);
+		u.union(7, 2);
+
+		u.union(6, 1);
+		u.union(7, 3);
+		System.out.println(u.connected(9,1));
 	}
 
 }

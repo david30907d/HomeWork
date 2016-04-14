@@ -11,7 +11,7 @@ public class resizing_arr extends QueueAb
   }
   public int[] resizeArray (int[] oldArray, int newSize) {
     // int oldSize = java.lang.reflect.Array.getLength(oldArray);
-    Class elementType = oldArray.getClass().getComponentType();//可以拿到array的class類別
+    Class<?> elementType = oldArray.getClass().getComponentType();//可以拿到array的class類別
     Object newArray = java.lang.reflect.Array.newInstance(
     elementType, newSize);//建立新陣列size is newSize
     System.arraycopy(oldArray, 0, newArray, 0, newSize/2);//複製oldArray從index0開始，到newArray從index0開始，複製長度為prserveLength
