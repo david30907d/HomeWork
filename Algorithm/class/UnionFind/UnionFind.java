@@ -19,13 +19,13 @@ public class UnionFind{
 	public void union(int p,int q){
 		int pid=find(p);
 		int qid=find(q);
-		if(size[p]>size[q]){//兩顆樹合併都會讓被合併的那個樹所有node的height增加1，所以要挑小顆的樹併到高的
+		if(size[pid]>size[qid]){//兩顆樹合併都會讓被合併的那個樹所有node的height增加1，所以要挑小顆的樹併到高的
 			id[qid]=pid;
-			size[pid]++;
+			size[pid]+=size[qid];
 		}
 		else{
 			id[pid]=qid;
-			size[qid]++;
+			size[qid]+=size[pid];
 		}
 	}
 	public boolean connected(int p,int q){
