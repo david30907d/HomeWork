@@ -2,11 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <fstream>
+#include <iomanip>
 #include <map>
 #include<iostream>
 using namespace std;
 map<string, string> optable;
 map<string, string>::iterator iter;
+map<string, int> locTable;
 int loc[1000]={0};
 int locPtr=0;
 const char *del = " ";
@@ -24,26 +26,59 @@ bool isOpcode(char *s){
 }
 
 void CalLoc(char *s){
-	if (isOpcode(s)==true){
-		// printf("%d ", locPtr);
+	if (isOpcode(s)==true){// 代表這一行只有2個token
 		loc[locPtr]=loc[locPtr-1]+3;
+		string tmp(s);
+		locTable[tmp]=loc[locPtr];
 		locPtr++;
-		// printf(" %d\n", loc[locPtr]);
 	}
-	else{
+	else{ // 代表這一行有3個token
 		char *label = s;
 		char *opcode = strtok(NULL, del);
 		char *operand = strtok(NULL, del);
 		int intord=0;
-		if(strcmp(opcode,"WORD")){
+		string tmp(label);
+		if(strcmp(opcode,"WORD")==0){
 			loc[locPtr]=loc[locPtr-1]+3;
+			locTable[tmp]=loc[locPtr];
 			locPtr++;
 		}
-		else if(strcmp(opcode,"RESW")){
+		else if(strcmp(opcode,"RESW")==0){
 			intord=atoi(operand);
 			loc[locPtr]=loc[locPtr-1]+3*intord;
+			locTable[tmp]=loc[locPtr];
 			locPtr++;
-			cout << s <<","<<locPtr-1<<","<<loc[locPtr-1]<<endl;
+		}
+		else if(strcmp(opcode,"RESB")==0){
+			intord=atoi(operand);
+			loc[locPtr]=loc[locPtr-1]+intord;
+			locTable[tmp]=loc[locPtr];
+			locPtr++;
+		}
+		else if(strcmp(opcode,"BYTE")==0){
+			// cout << operand[0];
+			if(operand[0]=='X'){
+				loc[locPtr]=loc[locPtr-1]+1;
+			}
+			else{
+				intord = strlen(operand)-4-3;
+				loc[locPtr]=loc[locPtr-1]+intord;
+			}
+			locTable[tmp]=loc[locPtr];
+			locPtr++;				
+		}
+		else if(strcmp(label,"FIRST")==0){
+			loc[locPtr]=loc[locPtr-1];
+			locPtr++;
+		}
+		else if (isOpcode(opcode)==true){
+			loc[locPtr]=loc[locPtr-1]+3;
+			locTable[tmp]=loc[locPtr];
+			locPtr++;
+		}
+		
+		else{
+			cout <<opcode<<" "<<isOpcode(opcode)<<":"<< "Syntax error !"<<endl;
 		}
 	}
 }
@@ -57,7 +92,9 @@ void build_lable(){
 	s = strtok(NULL, del);
 	if( strcmp(s,"START")==0){
 		s = strtok(NULL, del);
-		loc[locPtr++]=atoi(s);// start of location.
+		int hex;
+		sscanf(s,"%x",&hex);
+		loc[locPtr++]=hex;// start of location.
 	}
 	else{
 		loc[locPtr++]=0;
@@ -101,10 +138,9 @@ int main() {
 	///////////////// build optable finish ! /////////////////////
 	build_lable();
 	for (int i = 0; i < locPtr; ++i)
-	{	if(loc[i]>10000){
-			printf("%d--", i);
-		}
-		cout << loc[i]<<endl;
+	{	
+		cout <<hex<< loc[i]<<endl;
 	}
+	cout << ":::" << locTable["CLOOP"];
   	return 0;
 }
