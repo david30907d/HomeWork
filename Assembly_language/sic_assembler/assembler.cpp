@@ -16,8 +16,17 @@ void build_lable();
 bool isOpcode(string s);
 void CalLoc(string s);
 bool resb_func(int locPtr, string tmp);
+int mystrlen(char* token);
 bool resb=false;
 
+int mystrlen(char* token){
+	int count=1;
+	for(int i=0;i<strlen(token)/2;++i){
+		// printf("%c\n", token[i]);
+		count++;
+	}
+	return count;
+}
 bool resb_func(int locPtr, string tmp){
 	if(resb){
 		locTable[tmp]=loc[locPtr];
@@ -58,7 +67,7 @@ void CalLoc(char *s){
 		}
 		else if(strcmp(opcode,"RESW")==0){
 			if(resb_func(locPtr, tmp)) {locPtr++;return;}
-				
+
 			loc[locPtr]=loc[locPtr-1]+3*intord;
 			locTable[tmp]=loc[locPtr];
 			locPtr++;
@@ -66,7 +75,6 @@ void CalLoc(char *s){
 		else if(strcmp(opcode,"RESB")==0){
 			if(resb_func(locPtr, tmp)) {locPtr++;return;}
 			intord=atoi(operand);
-			cout << hex << "RESB:"<<intord <<" " << loc[locPtr-1]<<endl;
 			loc[locPtr]=loc[locPtr-1]+3;
 			locTable[tmp]=loc[locPtr];
 			locPtr++;
@@ -168,7 +176,7 @@ int main() {
 		getline(ifs3 , opcodestr);
 		cout<< opcodestr<<" ";
 
-		char tmp[20];
+		char tmp[100];
 		strcpy(tmp, opcodestr.c_str());//c_str can cast type string into char type
 		///////// function strtok is StringTokenizer in C++ ////////
 		char *token = strtok(tmp, del);
@@ -190,8 +198,15 @@ int main() {
 		}
 		else{
 			token = strtok(NULL, del);
-			if(strcmp(token,"BYTE")==0){
+			if(strcmp(token,"START")==0||strcmp(token,"RESW")==0||strcmp(token,"RESB")==0){
+				string tokenstr(token);
+				cout << optable[tokenstr];
 				token = strtok(NULL, del);
+				string tokenstr2(token);
+			}
+			else if(strcmp(token,"BYTE")==0){
+				token = strtok(NULL, del);
+				int len=mystrlen(token);
 				if(token[0]=='X'){
 					for(int i=2;i<strlen(token)-1;i++){//bug
 						printf("%c", token[i]);
@@ -200,24 +215,23 @@ int main() {
 				}
 				else{
 					// cout<< dec<<strlen(token)<<"++++++++++++";
-					for(int i=2;i<strlen(token)-1-4;i++){
-						printf("%d,", token[i]);
+					for(int i=2+2;i<len-1+2;i++){
+						printf("%X", token[i]);
 					}
 					printf("\n");
-					// cout<<token[0]<<"::::::";
 				}
 			}
 			else if(strcmp(token,"WORD")==0){
 				token = strtok(NULL, del);
 				int intord=atoi(token);
-				printf("%06X\n", intord);				
+				printf("%06X\n", intord);
 			}
 			else{
 				string tokenstr(token);
 				cout << optable[tokenstr];
 				token = strtok(NULL, del);
 				string tokenstr2(token);
-				cout << uppercase<<locTable[tokenstr2] << ":"<<tokenstr2;
+				cout << uppercase<<locTable[tokenstr2];
 			}
 		}
 
