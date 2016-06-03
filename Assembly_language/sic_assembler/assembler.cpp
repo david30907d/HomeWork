@@ -15,6 +15,17 @@ const char *del = " ";
 void build_lable();
 bool isOpcode(string s);
 void CalLoc(string s);
+bool resb_func(int locPtr, string tmp);
+bool resb=false;
+
+bool resb_func(int locPtr, string tmp){
+	if(resb){
+		locTable[tmp]=loc[locPtr];
+		resb=false;
+		locPtr++;
+		return true;
+	}
+}
 
 bool isOpcode(char *s){
 	string opStr(s);// cast char into string type
@@ -27,8 +38,9 @@ bool isOpcode(char *s){
 
 void CalLoc(char *s){
 	if (isOpcode(s)==true){// 代表這一行只有2個token
-		loc[locPtr]=loc[locPtr-1]+3;
 		string tmp(s);
+		if(resb_func(locPtr, tmp)) {locPtr++;return;}
+		loc[locPtr]=loc[locPtr-1]+3;
 		locTable[tmp]=loc[locPtr];
 		locPtr++;
 	}
@@ -39,44 +51,56 @@ void CalLoc(char *s){
 		int intord=0;
 		string tmp(label);
 		if(strcmp(opcode,"WORD")==0){
+			if(resb_func(locPtr, tmp)) {locPtr++;return;}
 			loc[locPtr]=loc[locPtr-1]+3;
 			locTable[tmp]=loc[locPtr];
 			locPtr++;
 		}
 		else if(strcmp(opcode,"RESW")==0){
-			intord=atoi(operand);
+			if(resb_func(locPtr, tmp)) {locPtr++;return;}
+				
 			loc[locPtr]=loc[locPtr-1]+3*intord;
 			locTable[tmp]=loc[locPtr];
 			locPtr++;
 		}
 		else if(strcmp(opcode,"RESB")==0){
+			if(resb_func(locPtr, tmp)) {locPtr++;return;}
 			intord=atoi(operand);
-			loc[locPtr]=loc[locPtr-1]+intord;
+			cout << hex << "RESB:"<<intord <<" " << loc[locPtr-1]<<endl;
+			loc[locPtr]=loc[locPtr-1]+3;
 			locTable[tmp]=loc[locPtr];
 			locPtr++;
+			resb=true;
+			loc[locPtr]=loc[locPtr-1]+intord;
 		}
 		else if(strcmp(opcode,"BYTE")==0){
+			if(resb_func(locPtr, tmp)) {locPtr++;return;}
 			// cout << operand[0];
 			if(operand[0]=='X'){
 				loc[locPtr]=loc[locPtr-1]+1;
 			}
 			else{
-				intord = strlen(operand)-4-3;
+				intord = strlen(operand)-4-3;//bug
 				loc[locPtr]=loc[locPtr-1]+intord;
 			}
 			locTable[tmp]=loc[locPtr];
-			locPtr++;				
+			locPtr++;
 		}
 		else if(strcmp(label,"FIRST")==0){
+			if(resb_func(locPtr, tmp)) {locPtr++;return;}
 			loc[locPtr]=loc[locPtr-1];
 			locPtr++;
 		}
 		else if (isOpcode(opcode)==true){
+			if(resb_func(locPtr, tmp)){
+				locPtr++;
+				return;
+			}
 			loc[locPtr]=loc[locPtr-1]+3;
 			locTable[tmp]=loc[locPtr];
 			locPtr++;
 		}
-		
+
 		else{
 			cout <<opcode<<" "<<isOpcode(opcode)<<":"<< "Syntax error !"<<endl;
 		}
@@ -137,10 +161,69 @@ int main() {
 	ifs2.close();
 	///////////////// build optable finish ! /////////////////////
 	build_lable();
+	ifstream ifs3 ( "input.txt" , ifstream::in );
 	for (int i = 0; i < locPtr; ++i)
-	{	
-		cout <<hex<< loc[i]<<endl;
+	{
+		cout <<hex<< loc[i]<< " ";
+		getline(ifs3 , opcodestr);
+		cout<< opcodestr<<" ";
+
+		char tmp[20];
+		strcpy(tmp, opcodestr.c_str());//c_str can cast type string into char type
+		///////// function strtok is StringTokenizer in C++ ////////
+		char *token = strtok(tmp, del);
+		if(strcmp(token,"RSUB")==0){
+			cout << "4C0000";
+		}
+		else if(isOpcode(token)==true){
+			string tokenstr(token);
+			cout << optable[tokenstr];
+			token = strtok(NULL, del);
+			if(strcmp(token,"BUFFER,X")==0){
+				int temp = locTable["BUFFER"]+8000;
+				cout << uppercase<<temp;
+			}
+			else{
+				string tokenstr2(token);
+				cout << uppercase<<locTable[tokenstr2];
+			}
+		}
+		else{
+			token = strtok(NULL, del);
+			if(strcmp(token,"BYTE")==0){
+				token = strtok(NULL, del);
+				if(token[0]=='X'){
+					for(int i=2;i<strlen(token)-1;i++){//bug
+						printf("%c", token[i]);
+					}
+					printf("\n");
+				}
+				else{
+					// cout<< dec<<strlen(token)<<"++++++++++++";
+					for(int i=2;i<strlen(token)-1-4;i++){
+						printf("%d,", token[i]);
+					}
+					printf("\n");
+					// cout<<token[0]<<"::::::";
+				}
+			}
+			else if(strcmp(token,"WORD")==0){
+				token = strtok(NULL, del);
+				int intord=atoi(token);
+				printf("%06X\n", intord);				
+			}
+			else{
+				string tokenstr(token);
+				cout << optable[tokenstr];
+				token = strtok(NULL, del);
+				string tokenstr2(token);
+				cout << uppercase<<locTable[tokenstr2] << ":"<<tokenstr2;
+			}
+		}
+
+		cout<<endl;
 	}
-	cout << ":::" << locTable["CLOOP"];
+	// cout << ":::" << locTable["CLOOP"];
+	ifs3.close();
   	return 0;
 }
