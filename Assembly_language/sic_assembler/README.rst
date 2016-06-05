@@ -1,12 +1,7 @@
 SIC Assembler (Pass 1)
 ########################
 
-
-
-
-
 目錄:
---------
 
 .. contents:: :local:
 
