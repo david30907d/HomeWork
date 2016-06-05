@@ -67,7 +67,7 @@ void CalLoc(char *s){
 		}
 		else if(strcmp(opcode,"RESW")==0){
 			if(resb_func(locPtr, tmp)) {locPtr++;return;}
-
+			intord=atoi(operand);
 			loc[locPtr]=loc[locPtr-1]+3*intord;
 			locTable[tmp]=loc[locPtr];
 			locPtr++;
@@ -208,13 +208,12 @@ int main() {
 				token = strtok(NULL, del);
 				int len=mystrlen(token);
 				if(token[0]=='X'){
-					for(int i=2;i<strlen(token)-1;i++){//bug
-						printf("%c", token[i]);
+					for(int i=mystrlen(token)-1;i<2*(mystrlen(token)-2);i++){//bug
+						cout<<token[i];
 					}
 					printf("\n");
 				}
 				else{
-					// cout<< dec<<strlen(token)<<"++++++++++++";
 					for(int i=2+2;i<len-1+2;i++){
 						printf("%X", token[i]);
 					}
