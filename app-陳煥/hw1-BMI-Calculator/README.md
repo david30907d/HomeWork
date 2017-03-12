@@ -41,3 +41,7 @@ facebook 提供的線上Compiler能夠讓開發時
 ![avd](../react-native-tools-avd.png)  
 You can see the list of available AVDs by opening the "AVD Manager" from within Android Studio. You can also run the following command in a terminal:
 > android avd
+
+## 效果
+
+![result](result.png)
