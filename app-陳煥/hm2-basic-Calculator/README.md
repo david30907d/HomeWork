@@ -44,4 +44,4 @@ You can see the list of available AVDs by opening the "AVD Manager" from within 
 
 ## 效果
 
-![result](result.png)
+![result](result.PNG)
