@@ -9,64 +9,83 @@ class Candycrush(object):
 		self.table = {}
 		self.detectQue = []
 
+	def exchange(self, x, y):
+		self.table[x], self.table[y] = self.table[y], self.table[x]
+
 	def getColorCandy(self):
 		return '\x1b[{}m 🍬 \x1b[0m'.format(self.Color[random.randint(0, self.numOfColor-1)])
 
-	def CollisionDetect(self):
+	def CollisionDetect(self, onlyCheck):
+		# onlyCheck means:if you don't want to correct this map
+		# only want to check if there is three candy in a line
+		# then set onlyCheck = True
+		# onlyCheck = True will not do recursive.
+		# if three candys in a line, then return True
+		# means Detect Collision.
 		for position, value in self.table.items():
-			if self.Collision_patrol(position, 'right')==False:self.CollisionDetect()
-			if self.Collision_patrol(position, 'down')==False:self.CollisionDetect()
+			if self.Collision_patrol(position, 'right', onlyCheck):
+				if onlyCheck:return True
+				self.CollisionDetect(onlyCheck)
+			if self.Collision_patrol(position, 'down', onlyCheck):
+				if onlyCheck:return True
+				self.CollisionDetect(onlyCheck)
 
-	def Collision_patrol(self, position, direction):
+	def Collision_patrol(self, position, direction, onlyCheck):
+		# onlyCheck means:if you don't want to correct this map
+		# only want to check if there is three candy in a line
+		# then set onlyCheck = True
+		# onlyCheck = True means won't set a new candy into map.
+		# only detect.
 		if direction == 'right':
-			if position%10 >7:return True
+			# set position%10 > 7 because i only check there is three candy in vertical lines.
+			# which means position+0~position+2 should be same color
+			# so need an upper bound
+			# position+2 cannot exceed limits of map!!!
+			if position%10 >7:return False
 			if self.table[position] == self.table[position+1] == self.table[position+2]:
-				self.table[position] = self.getColorCandy()
-				return False
+				if onlyCheck==False: self.table[position] = self.getColorCandy()
+				return True
 		elif direction == 'down':
-			if position>89:return True
+			if position>89:return False
 			if self.table[position] == self.table[position+10] == self.table[position+20]:
-				self.table[position] = self.getColorCandy()
-				return False
+				if onlyCheck==False: self.table[position] = self.getColorCandy()
+				return True
 
 	def RefreshDetect(self):
 		for position, value in self.table.items():
-			if self.Refresh_patrol(position, 'right')==True or self.Refresh_patrol(position, 'down')==True:
+			if self.Refresh_patrol(position, 'right') or self.Refresh_patrol(position, 'down'):
 				return
 				
 		print('origin table is impossible to play!')
 		self.show()
-		print('start refresh:')
 		self.build()
 
 	def Refresh_patrol(self, position, direction):
 		if direction == 'right':
-			if position%10 >6:return False
-			# 取4個相鄰的糖果，如果可以成功交換,其比例必為3：1
-			testField = collections.defaultdict(list)
-			for i in range(position, position+4):
-				testField[self.table[i]].append(i)
-				if len(testField[self.table[i]]) == 3:
-					print(testField)
-					return True
+			if position%10 >8:return False
+
+			self.exchange(position, position+1)
+			if self.CollisionDetect(onlyCheck=True):
+				self.exchange(position, position+1)
+				return True
+			else:
+				self.exchange(position, position+1)
 
 		elif direction == 'down':
-			if position>79:return False
-			if self.table[position] == self.table[position+10] == self.table[position+20]:
-				self.table[position] = self.getColorCandy()
+			if position>99:return False
+
+			self.exchange(position, position+10)
+			if self.CollisionDetect(onlyCheck=True):
+				self.exchange(position, position+10)
 				return True
-			# 取4個相鄰的糖果，如果可以成功交換,其比例必為3：1
-			testField = collections.defaultdict(list)
-			for i in range(position, position+40, 10):
-				testField[self.table[i]].append(i)
-				if len(testField[self.table[i]]) == 3:
-					return True
+			else:
+				self.exchange(position, position+10)
 
 	def build(self):
 		for i in range(1, self.length+1):
 			for j in range(0, self.width):
 				self.table[i*10+j] = self.getColorCandy()
-		self.CollisionDetect()
+		self.CollisionDetect(onlyCheck=False)
 		self.RefreshDetect()
 
 	def main(self):
@@ -75,6 +94,7 @@ class Candycrush(object):
 		self.build()
 		print('After refresh:')
 		self.show()
+		print(self.table)
 
 	def show(self):
 		for i in range(1, self.length+1):
