@@ -1,8 +1,8 @@
 import random, collections
 class Candycrush(object):
 	"""docstring for candycrush"""
-	def __init__(self):
-		self.length, self.width = 10, 10
+	def __init__(self, length, width):
+		self.length, self.width = length, width
 		self.numOfColor = None
 		self.round = 20
 		self.Color = ['0;31;40', '0;32;40', '0;33;40', '0;34;40', '0;35;40', '0;36;40', '0;37;40', '0;30;41', '0;32;41', '0;33;41', '0;34;41', '0;35;41', '0;36;41', '0;37;41', '0;30;42', '0;31;42', '0;33;42', '0;34;42', '0;35;42', '0;36;42', '0;37;42', '0;30;43', '0;31;43', '0;32;43', '0;34;43', '0;35;43', '0;36;43', '0;37;43', '0;30;44', '0;31;44', '0;32;44', '0;33;44', '0;35;44', '0;36;44', '0;37;44']
@@ -13,6 +13,7 @@ class Candycrush(object):
 		self.table[x], self.table[y] = self.table[y], self.table[x]
 
 	def getColorCandy(self):
+		# get Colorful Candy in random order
 		return '\x1b[{}m 🍬 \x1b[0m'.format(self.Color[random.randint(0, self.numOfColor-1)])
 
 	def CollisionDetect(self, onlyCheck):
@@ -52,15 +53,23 @@ class Candycrush(object):
 				return True
 
 	def RefreshDetect(self):
+		# Detect if there is any possibility to make three same color candy in a line.
 		for position, value in self.table.items():
 			if self.Refresh_patrol(position, 'right') or self.Refresh_patrol(position, 'down'):
 				return
 				
 		print('origin table is impossible to play!')
 		self.show()
+		print('after refresh:')
 		self.build()
 
 	def Refresh_patrol(self, position, direction):
+		# exchange candy in horizontally and vertically.
+		# and then use CollisionDetect to check if there is three candy in a line.
+		# if it does, then return True, means: it' possible to make this game start to play.
+		# else: continue to check.
+
+		# REMEMBER, those candys be exchanged need to be put back.
 		if direction == 'right':
 			if position%10 >8:return False
 
@@ -82,6 +91,9 @@ class Candycrush(object):
 				self.exchange(position, position+10)
 
 	def build(self):
+		# generat table in random order
+		# and then use CollisoinDetect to check map has no three candys in a line.
+		# also use RefreshDetect to check it's still possible to play this game.
 		for i in range(1, self.length+1):
 			for j in range(0, self.width):
 				self.table[i*10+j] = self.getColorCandy()
@@ -92,9 +104,7 @@ class Candycrush(object):
 		self.numOfColor = int(input('how many color do you want?'))
 
 		self.build()
-		print('After refresh:')
 		self.show()
-		print(self.table)
 
 	def show(self):
 		for i in range(1, self.length+1):
@@ -104,5 +114,5 @@ class Candycrush(object):
 			print(string)
 
 if __name__ == '__main__':
-	c = Candycrush()
+	c = Candycrush(10, 10)
 	c.main()
