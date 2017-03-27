@@ -26,14 +26,19 @@ c = CandyTable.CandyTable(10,10)
 c.main()
 ```
 
-* 輸入想要的顏色數量：
-  ![table3](candy3.png)
-* 最高支援到35色，若初始圖片不可能讓三顆糖果連線，則自動refresh：
-  ![table35](candy35_refresh.png)
+* 輸入想要的顏色數量：  
 
-  ![table35-1](candy35final.png)
-* 取得這張CandyTable的資訊：  
-  `a.table`：
+![table3](https://github.com/david30907d/HomeWork/blob/master/Python-%E6%9B%BE%E5%AD%B8%E6%96%87/hw1-CandyCrush/candy3.png?raw=true)
+
+* 最高支援到35色，若初始圖片不可能讓三顆糖果連線，則自動refresh：  
+
+![table35](https://github.com/david30907d/HomeWork/blob/master/Python-%E6%9B%BE%E5%AD%B8%E6%96%87/hw1-CandyCrush/candy35_refresh.png?raw=true)
+
+
+![table35-1](https://github.com/david30907d/HomeWork/blob/master/Python-%E6%9B%BE%E5%AD%B8%E6%96%87/hw1-CandyCrush/candy35final.png?raw=true)
+
+* `a.table`：可以取得這張CandyTable的資訊  
+
   ```
   {
     10: u'\x1b[0;33;40m \U0001f36c \x1b[0m',
@@ -50,9 +55,12 @@ c.main()
 	108: u'\x1b[0;33;40m \U0001f36c \x1b[0m',
 	109: u'\x1b[0;33;40m \U0001f36c \x1b[0m'
 }
-  ```  
-  x座標為1~10，y座標為0~9  
-  字串一樣代表該位置的糖果是一樣的。
+```  
+
+座標系統從左上角開始數  
+左上角為10 右下角為109
+y座標為1到10，x座標為0到9  
+字串一樣代表該位置的糖果是一樣的。
 
 ### Break down into end to end tests
 
