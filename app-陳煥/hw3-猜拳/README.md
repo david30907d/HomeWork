@@ -32,7 +32,7 @@ If everything is set up correctly, you should see your new app running in your A
 ## 執行  
 
 1. 在網頁測試（`Recommended`）：  
-將本次作業，`index.android.js`貼到此[頁面](https://facebook.github.io/react-native/docs/props.html)  
+將本次作業，`index.android.js`貼到此[頁面](https://facebook.github.io/react-native/docs/handling-text-input.html#content)  
 facebook 提供的線上Compiler能夠讓開發時  
 模擬器的重新載入時間縮到最短
 
