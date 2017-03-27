@@ -1,6 +1,6 @@
-# PMI of KCM
+# CandyTable
 
-一個將PMI套用到KCM上的django套件
+一個產生出CandyCrush初始table的小工具
 
 ## Getting Started
 
@@ -8,48 +8,51 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisities
 
-1. OS：Ubuntu / OSX would be nice
-2. environment：need python3 `sudo apt-get update; sudo apt-get install; python3 python3-dev`
+本套件pythno2跟python3皆通用  
+若不能執行麻煩回報`Pull Requests`
 
 ### Installing
 
-1. 使用虛擬環境 Use virtualenv is recommended：
-  1. `virtualenv venv`
-2. 啟動方法 How to activate virtualenv
-  1. for Linux：`. venv/bin/activate`
-  2. for Windows：`venv\Scripts\activate`
-3. 安裝 Install：`pip install PMIofKCM`
+* 安裝 Install：`pip install CandyTable`
 
 ## Running & Testing
 
 ## Run
 
-1. `settings.py`裏面需要新增`PMIofKCM`這個app：
+執行下列指令：
+```
+import CandyTable
+c = CandyTable.CandyTable(10,10)
+c.main()
+```
 
-  - add this:
+* 輸入想要的顏色數量：
+  ![table3](candy3.png)
+* 最高支援到35色，若初始圖片不可能讓三顆糖果連線，則自動refresh：
+  ![table35](candy35_refresh.png)
 
-    ```
-    INSTALLED_APPS=[
-    ...
-    ...
-    ...
-    'PMIofKCM',
-    ]
-    ```
-
-2. `urls.py`需要新增下列代碼 把所有 `pmi` 開頭的request都導向到`PMIofKCM`這個app：
-
-  - add this:
-
-    ```
-    # pmiOfKcm
-    import PMIofKCM.urls
-    urlpatterns += [
-        url(r'^pmi/', include(PMIofKCM.urls))
-    ]
-    ```
-
-3. `python manage.py runserver`：即可進入頁面 `127.0.0.1:8000/pmi` 測試 pmi 是否安裝成功。
+  ![table35-1](candy35final.png)
+* 取得這張CandyTable的資訊：  
+  `a.table`：
+  ```
+  {
+    10: u'\x1b[0;33;40m \U0001f36c \x1b[0m',
+	11: u'\x1b[0;33;40m \U0001f36c \x1b[0m',
+	12: u'\x1b[0;32;40m \U0001f36c \x1b[0m',
+	13: u'\x1b[0;31;40m \U0001f36c \x1b[0m',
+	14: u'\x1b[0;33;40m \U0001f36c \x1b[0m',
+	15: u'\x1b[0;33;40m \U0001f36c \x1b[0m',
+	16: u'\x1b[0;32;40m \U0001f36c \x1b[0m',
+	17: u'\x1b[0;31;40m \U0001f36c \x1b[0m',
+	18: u'\x1b[0;33;40m \U0001f36c \x1b[0m',
+	19: u'\x1b[0;32;40m \U0001f36c \x1b[0m',
+	...
+	108: u'\x1b[0;33;40m \U0001f36c \x1b[0m',
+	109: u'\x1b[0;33;40m \U0001f36c \x1b[0m'
+}
+  ```  
+  x座標為1~10，y座標為0~9  
+  字串一樣代表該位置的糖果是一樣的。
 
 ### Break down into end to end tests
 
@@ -61,22 +64,14 @@ not yet.
 
 ## Deployment
 
-PMIofKCM is a django-app, so depends on django project.
-
-PMIofKCM 是一般的django插件，所以必須依存於django專案
+CandyTable 只是一個小玩具而已，`pip install CandyTable` 就好
 
 ## Built With
 
-* python3.5
-* pymongo
-
-## Versioning
-
-For the versions available, see the [tags on this repository](https://github.com/david30907d/KCM/releases).
+* python2.7
 
 ## Contributors
 
-* **陳聖軒**
 * **張泰瑋** [david](https://github.com/david30907d)
 
 ## License

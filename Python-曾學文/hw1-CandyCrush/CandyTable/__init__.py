@@ -1,11 +1,17 @@
+# -*- coding: utf-8 -*-
+# encoding=utf8
+from __future__ import absolute_import
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
 import random, collections
-class Candycrush(object):
-	"""docstring for candycrush"""
+class CandyTable(object):
+	u"""docstring for candycrush"""
 	def __init__(self, length, width):
 		self.length, self.width = length, width
 		self.numOfColor = None
 		self.round = 20
-		self.Color = ['0;31;40', '0;32;40', '0;33;40', '0;34;40', '0;35;40', '0;36;40', '0;37;40', '0;30;41', '0;32;41', '0;33;41', '0;34;41', '0;35;41', '0;36;41', '0;37;41', '0;30;42', '0;31;42', '0;33;42', '0;34;42', '0;35;42', '0;36;42', '0;37;42', '0;30;43', '0;31;43', '0;32;43', '0;34;43', '0;35;43', '0;36;43', '0;37;43', '0;30;44', '0;31;44', '0;32;44', '0;33;44', '0;35;44', '0;36;44', '0;37;44']
+		self.Color = [u'0;31;40', u'0;32;40', u'0;33;40', u'0;34;40', u'0;35;40', u'0;36;40', u'0;37;40', u'0;30;41', u'0;32;41', u'0;33;41', u'0;34;41', u'0;35;41', u'0;36;41', u'0;37;41', u'0;30;42', u'0;31;42', u'0;33;42', u'0;34;42', u'0;35;42', u'0;36;42', u'0;37;42', u'0;30;43', u'0;31;43', u'0;32;43', u'0;34;43', u'0;35;43', u'0;36;43', u'0;37;43', u'0;30;44', u'0;31;44', u'0;32;44', u'0;33;44', u'0;35;44', u'0;36;44', u'0;37;44']
 		self.table = {}
 		self.detectQue = []
 
@@ -14,7 +20,7 @@ class Candycrush(object):
 
 	def getColorCandy(self):
 		# get Colorful Candy in random order
-		return '\x1b[{}m 🍬 \x1b[0m'.format(self.Color[random.randint(0, self.numOfColor-1)])
+		return u'\x1b[{}m 🍬 \x1b[0m'.format(self.Color[random.randint(0, self.numOfColor-1)])
 
 	def CollisionDetect(self, onlyCheck):
 		# onlyCheck means:if you don't want to correct this map
@@ -24,10 +30,10 @@ class Candycrush(object):
 		# if three candys in a line, then return True
 		# means Detect Collision.
 		for position, value in self.table.items():
-			if self.Collision_patrol(position, 'right', onlyCheck):
+			if self.Collision_patrol(position, u'right', onlyCheck):
 				if onlyCheck:return True
 				self.CollisionDetect(onlyCheck)
-			if self.Collision_patrol(position, 'down', onlyCheck):
+			if self.Collision_patrol(position, u'down', onlyCheck):
 				if onlyCheck:return True
 				self.CollisionDetect(onlyCheck)
 
@@ -37,7 +43,7 @@ class Candycrush(object):
 		# then set onlyCheck = True
 		# onlyCheck = True means won't set a new candy into map.
 		# only detect.
-		if direction == 'right':
+		if direction == u'right':
 			# set position%10 > 7 because i only check there is three candy in vertical lines.
 			# which means position+0~position+2 should be same color
 			# so need an upper bound
@@ -46,7 +52,7 @@ class Candycrush(object):
 			if self.table[position] == self.table[position+1] == self.table[position+2]:
 				if onlyCheck==False: self.table[position] = self.getColorCandy()
 				return True
-		elif direction == 'down':
+		elif direction == u'down':
 			if position>89:return False
 			if self.table[position] == self.table[position+10] == self.table[position+20]:
 				if onlyCheck==False: self.table[position] = self.getColorCandy()
@@ -55,12 +61,12 @@ class Candycrush(object):
 	def RefreshDetect(self):
 		# Detect if there is any possibility to make three same color candy in a line.
 		for position, value in self.table.items():
-			if self.Refresh_patrol(position, 'right') or self.Refresh_patrol(position, 'down'):
+			if self.Refresh_patrol(position, u'right') or self.Refresh_patrol(position, u'down'):
 				return
-				
-		print('origin table is impossible to play!')
+
+		print(u'origin table is impossible to play!')
 		self.show()
-		print('after refresh:')
+		print(u'after refresh:')
 		self.build()
 
 	def Refresh_patrol(self, position, direction):
@@ -70,7 +76,7 @@ class Candycrush(object):
 		# else: continue to check.
 
 		# REMEMBER, those candys be exchanged need to be put back.
-		if direction == 'right':
+		if direction == u'right':
 			if position%10 >8:return False
 
 			self.exchange(position, position+1)
@@ -80,7 +86,7 @@ class Candycrush(object):
 			else:
 				self.exchange(position, position+1)
 
-		elif direction == 'down':
+		elif direction == u'down':
 			if position>99:return False
 
 			self.exchange(position, position+10)
@@ -101,18 +107,18 @@ class Candycrush(object):
 		self.RefreshDetect()
 
 	def main(self):
-		self.numOfColor = int(input('how many color do you want?'))
+		self.numOfColor = int(input(u'how many color do you want?'))
 
 		self.build()
 		self.show()
 
 	def show(self):
 		for i in range(1, self.length+1):
-			string = ''
+			string = u''
 			for j in range(0, self.width):
 				string += self.table[i*10+j]
-			print(string)
+			print(string).encode('utf-8')
 
-if __name__ == '__main__':
-	c = Candycrush(10, 10)
+if __name__ == u'__main__':
+	c = CandyTable(10, 10)
 	c.main()
