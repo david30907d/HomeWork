@@ -1,0 +1,12 @@
+{% load render_bundle from webpack_loader %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Sqlite demo</title>
+    </head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.css">
+    <body>
+        <div id="container"></div>
+        {% render_bundle 'main' %}
+    </body>
+</html>

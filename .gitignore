@@ -1,6 +1,8 @@
 # virtualenv
 venv
 Python-曾學文/hw1-CandyCrush/venv2/
+db.sqlite3
+node_modules/
 
 # System stuff
 [Oo]bj
