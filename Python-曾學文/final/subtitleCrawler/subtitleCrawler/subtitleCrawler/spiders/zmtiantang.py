@@ -7,7 +7,7 @@ import shutil
 class ZmtiantangSpider(scrapy.Spider):
     name = "zmtiantang"
     allowed_domains = ["www.zmtiantang.com"]
-    start_urls = list(map(lambda x:'http://www.zmtiantang.com/e/action/ListInfo/?classid=1&page=' + str(x), range(0, 5630)))
+    start_urls = list(map(lambda x:'http://www.zmtiantang.com/e/action/ListInfo/?classid=1&page=' + str(x), range(4857, 5630)))
 
     def parse(self, response):
         res = BeautifulSoup(response.body)
