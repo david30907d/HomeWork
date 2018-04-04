@@ -15,8 +15,9 @@ class KNN(object):
 		# separate array into input and output components
 		self.X = array[:,1:]
 		self.Y = array[:,0]
+		self.nor = nor
 		# normalizer can turn length of vector into 1.
-		if nor == 'nor':
+		if self.nor == 'nor':
 			scaler = Normalizer().fit(self.X)
 		else:
 			scaler = MinMaxScaler().fit(self.X)
@@ -47,42 +48,52 @@ class KNN(object):
 
 	def evaluate(self, k=5):
 		itertimes = 20
-		accuracy = 0
-		sk_acc = 0
+		train_accuracy = 0
+		test_accuracy = 0
+		sk_test_acc = 0
 		clf = neighbors.KNeighborsClassifier()
 		for _ in range(itertimes):
 			kf = KFold(len(self.data), n_folds=self.fold, shuffle=True)
 			for train_index, test_index in kf:
 				X_train, X_test = self.X[train_index], self.X[test_index]
 				Y_train, Y_test = self.Y[train_index], self.Y[test_index]
+
+				# use traing set
+				predict = self.classify(X_train, X_train, Y_train, k)
+				train_accuracy += len([1 for i,j in zip(predict, Y_train) if i==j]) / len(Y_test) / self.fold / itertimes			
+
+				# use testing set
 				predict = self.classify(X_test, X_train, Y_train, k)
-				accuracy += len([1 for i,j in zip(predict, Y_test) if i==j]) / len(Y_test)
+				test_accuracy += len([1 for i,j in zip(predict, Y_test) if i==j]) / len(Y_test) / self.fold / itertimes
 
 				# cmp with sklearn performance
 				clf.fit(X_train, Y_train)
-				sk_acc += clf.score(X_test, Y_test)
-		print('k: {}, my knn:{}, sklearn\'s knn:{}'.format(k, accuracy / self.fold / itertimes, sk_acc/self.fold/itertimes))
-		return (accuracy / self.fold / itertimes, sk_acc/self.fold/itertimes)
+				sk_test_acc += clf.score(X_test, Y_test) / self.fold / itertimes
+		print('k: {}, my knn using traingSet:{} my knn:{}, sklearn\'s knn:{}'.format(k, train_accuracy, test_accuracy, sk_test_acc))
+		return (train_accuracy, test_accuracy, sk_test_acc)
 
 	def visualize(self, k):
-		mylist, klist = [], []
+		myTrainList, mylist, klist = [], [], []
 		for i in range(1, k+1):
-			my_acc, k_acc = self.evaluate(k=i)
+			myTrain_acc, my_acc, k_acc = self.evaluate(k=i)
+			myTrainList.append(myTrain_acc)
 			mylist.append(my_acc)
 			klist.append(k_acc)
 		# axes = plt.gca()
 		# axes.set_ylim([0.419,0.44])
+		plt.plot(range(1, k+1), myTrainList, label='my knn using Training Set')
 		plt.plot(range(1, k+1), mylist, label='my knn')
 		plt.plot(range(1, k+1), klist, label='sklearn')
 		plt.title('Train History')
 		plt.ylabel('acc')
 		plt.xlabel('k neighbors')
 		plt.legend(loc='best')
+		plt.savefig('{}.png'.format(self.nor))
 		plt.show()
 
 if __name__ == '__main__':
 	# normalize
-	k = KNN()
+	k = KNN(nor='normalization')
 	k.evaluate()
 	k.visualize(10)
 

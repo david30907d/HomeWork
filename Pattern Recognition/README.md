@@ -1,5 +1,7 @@
 # Self-Implementation of KNN
 
+4103056011 中興資工四 張泰瑋
+
 * Normalized the raw datas with `Normalizer`, powerd by sklearn:`scaler = Normalizer().fit(X)`
 	* Also compare the acc with min-MAX normalization, the result is provided below.
 * Use euclidean distance to calculate distance:`np.linalg.norm(np.array(input_vec)-np.array(v))`
@@ -26,6 +28,8 @@ def visualize(self, k):
 ## Visualization
 
 1. Normalization:
-![acc](./acc.png)
+
+	![acc](./normalization.png)
 2. min-Max normalization:
-![acc](./min-max.png)
+
+	![acc](./min-max.png)
