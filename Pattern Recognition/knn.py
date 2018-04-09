@@ -22,9 +22,9 @@ class KNN(object):
 		else:
 			scaler = MinMaxScaler().fit(self.X)
 
-		self.data = scaler.transform(self.X)
+		self.X = scaler.transform(self.X)
 		numpy.set_printoptions(precision=3)
-		# print(self.data[0:5,:])
+		# print(self.X[0:5,:])
 
 	def classify(self, testset_vec, trainset_vec, trainset_class, k=5):
 		"""
@@ -53,7 +53,7 @@ class KNN(object):
 		sk_test_acc = 0
 		clf = neighbors.KNeighborsClassifier()
 		for _ in range(itertimes):
-			kf = KFold(len(self.data), n_folds=self.fold, shuffle=True)
+			kf = KFold(len(self.X), n_folds=self.fold, shuffle=True)
 			for train_index, test_index in kf:
 				X_train, X_test = self.X[train_index], self.X[test_index]
 				Y_train, Y_test = self.Y[train_index], self.Y[test_index]
