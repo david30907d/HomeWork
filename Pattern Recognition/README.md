@@ -2,6 +2,12 @@
 
 4103056011 中興資工四 張泰瑋
 
+## RUN
+
+* `python3 knn.py`
+
+## Details
+
 * Normalized the raw datas with `Normalizer`, powerd by sklearn:`scaler = Normalizer().fit(X)`
 	* Also compare the acc with min-MAX normalization, the result is provided below.
 * Use euclidean distance to calculate distance:`np.linalg.norm(np.array(input_vec)-np.array(v))`
@@ -33,3 +39,9 @@ def visualize(self, k):
 2. min-Max normalization:
 
 	![acc](./min-max.png)
+	
+## Conclusions
+
+1. My knn's performance is comparable with sklearn's knn, and the accuracys are the same when `k = 5`
+2. normalization and min-Max normalization each work fine in this case.
+
