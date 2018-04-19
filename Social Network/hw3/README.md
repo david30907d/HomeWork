@@ -1,7 +1,11 @@
+# For homeworks
+
+`bash run.sh`
+
 # Usage
 
-1. `python3 main.py`
-2. 輸入你想取幾個字出來產生文字雲, 必須是int
+1. python3 tagCloud.py <柯文哲> 
+2. python3 main.py <柯文哲> <50> (輸入你想取幾個字出來產生文字雲, 必須是int)
 
 
 ## Result
