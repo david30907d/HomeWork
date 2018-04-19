@@ -31,7 +31,7 @@ top10_table = {}
 invertedIndex = IndexCollect.find({'issue':issue}).limit(1)[0]['ObjectID']
 for ObjectID in tqdm.tqdm(invertedIndex):
     doc = ' '.join(articlesCollect.find({'_id':ObjectID}).limit(1)[0]['content'])
-    print(doc, ObjectID)
+    # print(doc, ObjectID)
     if not doc:
         continue
     result = requests.post("http://140.120.13.243/tfidf/tfidf?flag=n", {"doc":doc}).json()

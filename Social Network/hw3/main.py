@@ -11,11 +11,11 @@ hate_topk = sorted(hate.items(), key=lambda x:-x[1])[:topk]
 
 print('gossip_topk:')
 print('=================================')
-print(gossip_topk)
+# print(gossip_topk)
 
 print('hate_topk:')
 print('=================================')
-print(hate_topk)
+# print(hate_topk)
 
 json.dump(gossip_topk, open('gossip_topk-{}.json'.format(issue), 'w'))
 json.dump(hate_topk, open('hate_topk-{}.json'.format(issue), 'w'))
