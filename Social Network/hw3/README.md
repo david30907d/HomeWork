@@ -26,3 +26,27 @@ hate_topk:
 
 1. int取多少可能要試試看
 2. 取出來有些stopword可能要人工過濾一下
+
+## 目前有的政治人物關鍵字
+
+1. 川普:
+	* [gossip_topk-川普](八卦版/gossip_topk-川普.json)
+	* [hate_topk-川普](政黑板/hate_topk-川普.json)
+2. 朱立倫:
+	* [gossip_topk-朱立倫](八卦版/gossip_topk-朱立倫.json)
+	* [hate_topk-朱立倫](政黑板/hate_topk-朱立倫.json)
+3. 林佳龍:
+	* [gossip_topk-林佳龍](八卦版/gossip_topk-林佳龍.json)
+	* [hate_topk-林佳龍](政黑板/hate_topk-林佳龍.json)
+4. 柯文哲:
+	* [gossip_topk-柯文哲](八卦版/gossip_topk-柯文哲.json)
+	* [hate_topk-柯文哲](政黑板/hate_topk-柯文哲.json)
+5. 蔡英文:
+	* [gossip_topk-蔡英文](八卦版/gossip_topk-蔡英文.json)
+	* [hate_topk-蔡英文](政黑板/hate_topk-蔡英文.json)
+6. 金正恩:
+	* [gossip_topk-金正恩](八卦版/gossip_topk-金正恩.json)
+	* [hate_topk-金正恩](政黑板/hate_topk-金正恩.json)
+7. 黃國昌:
+	* [gossip_topk-黃國昌](八卦版/gossip_topk-黃國昌.json)
+	* [hate_topk-黃國昌](政黑板/hate_topk-黃國昌.json)
