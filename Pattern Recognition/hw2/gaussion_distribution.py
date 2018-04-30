@@ -8,54 +8,72 @@ def get_gaussian_random():
 	m = 0
 	while m == 0:
 		m = round(np.random.random() * 100)
-
 	numbers = np.random.random(int(m))
 	summation = float(np.sum(numbers))
 	gaussian = (summation - m/2) / math.sqrt(m/12.0)
-
 	return gaussian
 
-def generate_known_gaussian(dimensions):
-	count = 1000
+# get_gaussian_random()
 
+def generate_known_gaussian(dimensions, count):
 	ret = []
 	for i in range(count):
 		current_vector = []
 		for j in range(dimensions):
 			g = get_gaussian_random()
 			current_vector.append(g)
-
-		ret.append( tuple(current_vector) )
-
+		ret.append(current_vector)
 	return ret
 
-def main():
-	known = generate_known_gaussian(2)
+# generate_known_gaussian(2)
 
-	target_mean = np.matrix([ [1.0], [5.0]])
-	target_cov  = np.matrix([[  1.0, 0.7], 
-							 [  0.7, 0.6]])
+def stationary_random_process(dimension):
+	stationary = np.zeros((dimension, dimension))
+	np.fill_diagonal(stationary, 1)
+	max_len = len(stationary)
+	p1, p2 = 1, 1
+	for axis in range(len(stationary)):
+		another_axis = 0
+		axis_backup = axis
+		while axis < max_len and another_axis < max_len:
+			stationary[axis, another_axis] = p1
+			axis += 1
+			another_axis += 1
+		p1 *= 0.9
+		another_axis = 0
+		axis = axis_backup
+		while another_axis < max_len and axis < max_len:
+			stationary[another_axis, axis] = p2
+			another_axis += 1
+			axis += 1
+		p2 *= 0.5
+	return stationary
 
-	[eigenvalues, eigenvectors] = np.linalg.eig(target_cov)
+# stationary_random_process(5)
+
+def main(dimension, count):
+	known = generate_known_gaussian(dimension, count)
+	target_cov  = np.matrix(stationary_random_process(dimension))
+	eigenvalues, eigenvectors = np.linalg.eig(target_cov)
+	# 簡單的證明eigenvalue和eigenvector沒算錯
+	print("簡單的證明eigenvalue和eigenvector沒算錯", np.dot(target_cov, eigenvectors) == np.multiply(eigenvalues, eigenvectors))
 	l = np.matrix(np.diag(np.sqrt(eigenvalues)))
 	Q = np.matrix(eigenvectors) * l
-
 	x1_tweaked = []
 	x2_tweaked = []
 	tweaked_all = []
-	for i, j in known:
-		original = np.matrix( [[i], [j]]).copy()
-
-		tweaked = (Q * original) + target_mean
-		x1_tweaked.append(float(tweaked[0]))
-		x2_tweaked.append(float(tweaked[1]))
-		tweaked_all.append( tweaked )
+	for original in known:
+		original = np.matrix(original).T
+		tweaked = Q * original
+		x1_tweaked.append(tweaked[0])
+		x2_tweaked.append(tweaked[1])
+		tweaked_all.append(tweaked)
 
 	plt.scatter(x1_tweaked, x2_tweaked)
-	plt.axis([-6, 10, -6, 10])
-	plt.hlines(0, -6, 10)
-	plt.vlines(0, -6, 10)
+	# plt.axis([-6, 10, -6, 10])
+	# plt.hlines(0, -6, 10)
+	# plt.vlines(0, -6, 10)
 	plt.show()
 
 if __name__ == "__main__":
-	main()
+	main(20, 100)
