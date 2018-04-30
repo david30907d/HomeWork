@@ -94,7 +94,11 @@ def main(dimension, count):
 
 ## Visualization
 
-![acc](./distribution.png)
+1. `p=0.9`:
+![0.9](./0.9.png)
+
+2. `p=0.5`:
+![0.5](./0.5.png)
 
 ## Conclusions
 
