@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
 import numpy as np
-import math
+import math, json
 import matplotlib.pyplot as plt
+from itertools import chain
 
 def get_gaussian_random():
 	m = 0
@@ -71,6 +72,7 @@ def main(dimension, count, p):
 
 	plt.scatter(x1_tweaked, x2_tweaked)
 	plt.show()
+	json.dump([list(chain(*i.tolist())) + [p] for i in tweaked_all], open(str(p)+'.json', 'w'))
 
 if __name__ == "__main__":
 	main(20, 100, 0.9)
