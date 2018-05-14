@@ -1,6 +1,6 @@
 # HW3 naive-bayes-classifier-from-scratch
 
-[程式碼從這邊參考的](https://machinelearningmastery.com/naive-bayes-classifier-scratch-python/)
+[程式碼從這邊參考的:https://machinelearningmastery.com/naive-bayes-classifier-scratch-python/](https://machinelearningmastery.com/naive-bayes-classifier-scratch-python/)
 
 4103056011 中興資工四 張泰瑋
 
