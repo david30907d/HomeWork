@@ -49,6 +49,7 @@ def calculateClassProbabilities(summaries, inputVector):
 
 1. wine:
 	* accuracy:`94.91525423728814%`
+	* almost the same as `KNN` did
 2. use hw2 as data set:
 	* accuracy:`51.515151515151516%`
-
+	* these two gaussian distribution has the same mean vector, so it's very hard to classify.
