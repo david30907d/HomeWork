@@ -26,7 +26,7 @@ history = model.fit(self.X_train, self.y_train,
 ## accuracy
 
 | method   |      DNN     | bayes  | knn  |
-|----------|:------------:|------:|---|---|
+|----------|:------------:|------:|---|
 | acc | 0.955 | 0.949 |  0.956 |
 
 ## conclusion
