@@ -38,7 +38,7 @@ class DNN(object):
 		learning_rate = 0.00001
 		batch_size = 4
 		epoch = 1000
-		num_steps = epoch * self.X_train / batch_size
+		num_steps = int(epoch * len(self.X_train) / batch_size)
 		display_step = 100
 
 		# tf Graph input
@@ -80,18 +80,13 @@ class DNN(object):
 			self.sess.run(train_op, feed_dict={X: batch_x, Y: batch_y})
 			if step % display_step == 0 or step == 1:
 				# Calculate batch loss and accuracy
-				loss, acc, pred = self.sess.run([loss_op, accuracy, prediction], feed_dict={X: batch_x, Y: batch_y})
-				print("Step " + str(step) + ", Minibatch Loss= " + \
-					  "{:.4f}".format(loss) + ", Training Accuracy= " + \
-					  "{:.3f}".format(acc))
+				loss, acc = self.sess.run([loss_op, accuracy], feed_dict={X: batch_x, Y: batch_y})
+				print("Step " + str(step) + ", Minibatch Loss= " + str(loss) + ", Training Accuracy= " + str(acc))
 
 
 		print("Optimization Finished!")
 		# Calculate accuracy for MNIST test images
-		print("Testing Accuracy:", \
-			self.sess.run(accuracy, feed_dict={X: self.X_test,
-										  Y: self.y_test}))
-
+		print("Testing Accuracy:", self.sess.run(accuracy, feed_dict={X: self.X_test, Y: self.y_test}))
 		self.sess.close()
 
 	def useKaras(self):
@@ -117,5 +112,5 @@ class DNN(object):
 
 if __name__ == '__main__':
 	d = DNN('minmax')
-	d.useKaras()
 	d.useTf()
+	d.useKaras()
