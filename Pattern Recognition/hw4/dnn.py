@@ -44,13 +44,14 @@ class DNN(object):
 		# tf Graph input
 		X = tf.placeholder("float", [None, 13])
 		Y = tf.placeholder("float", [None, 3])
+		isTrain = tf.placeholder(tf.bool, shape=())
 
 		layer_1 = tf.layers.dense(X, 512, activation=tf.nn.relu)
-		drop_1 = tf.layers.dropout(layer_1, rate=0.5)
+		drop_1 = tf.layers.dropout(layer_1, rate=0.5, training=isTrain)
 		layer_2 = tf.layers.dense(drop_1, 512, activation=tf.nn.relu)
-		drop_2 = tf.layers.dropout(layer_2, rate=0.5)
+		drop_2 = tf.layers.dropout(layer_2, rate=0.5, training=isTrain)
 		layer_3 = tf.layers.dense(drop_2, 512, activation=tf.nn.relu)
-		drop_3 = tf.layers.dropout(layer_3, rate=0.5)
+		drop_3 = tf.layers.dropout(layer_3, rate=0.5, training=isTrain)
 		out_layer = tf.layers.dense(drop_3, 3)
 		prediction = tf.nn.softmax(out_layer)
 
@@ -77,16 +78,16 @@ class DNN(object):
 			# Run optimization op (backprop)
 			choose = int(np.random.rand() * len(self.X_train))
 			batch_x, batch_y = np.array(self.X_train[choose:choose+batch_size]), np.array(self.y_train[choose:choose+batch_size])
-			self.sess.run(train_op, feed_dict={X: batch_x, Y: batch_y})
+			self.sess.run(train_op, feed_dict={X: batch_x, Y: batch_y, isTrain:True})
 			if step % display_step == 0 or step == 1:
 				# Calculate batch loss and accuracy
-				loss, acc = self.sess.run([loss_op, accuracy], feed_dict={X: batch_x, Y: batch_y})
+				loss, acc = self.sess.run([loss_op, accuracy], feed_dict={X: batch_x, Y: batch_y, isTrain:True})
 				print("Step " + str(step) + ", Minibatch Loss= " + str(loss) + ", Training Accuracy= " + str(acc))
 
 
 		print("Optimization Finished!")
 		# Calculate accuracy for MNIST test images
-		print("Testing Accuracy:", self.sess.run(accuracy, feed_dict={X: self.X_test, Y: self.y_test}))
+		print("Testing Accuracy:", self.sess.run(accuracy, feed_dict={X: self.X_test, Y: self.y_test, isTrain:False}))
 		self.sess.close()
 
 	def useKaras(self):
